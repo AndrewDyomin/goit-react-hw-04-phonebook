@@ -7,13 +7,17 @@ import { useEffect, useState } from 'react';
 
 export const App = () => {
 const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem("contacts");
-    if (savedContacts !== null) {
+    const savedContacts = localStorage.getItem("contacts") ?? [];
+    console.log(savedContacts);
+    if (savedContacts.length !== 0) {
       const parsedContacts = JSON.parse(savedContacts);
+      console.log(parsedContacts);
       return(parsedContacts);
+    } else if (savedContacts.length === 0) {
+      return ([]);
     };
 });
-const [filter, setFilter] = useState('');
+const [filters, setFilter] = useState('');
 
 useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
@@ -40,14 +44,14 @@ const handleDelete = (contactId) => {
   setContacts(prevState => prevState.filter(contact => contact.id !== contactId));
 };
 
-const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filters.toLowerCase()));
 
   return (
     <>
       <GlobalStyle />
       <AddContact create={createContact} />
       <div>
-        <Filter onFilter={changeFilter} initValue={filter}/>
+        <Filter onFilter={changeFilter} initValue={filters}/>
         <ContactList actual={actualContacts} onDelete={handleDelete}/>
       </div>
     </>
