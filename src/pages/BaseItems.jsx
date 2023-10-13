@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { nanoid } from 'nanoid';
 import { Filter } from '../components/filter/Filter';
+import { AddBaseItem } from "components/newBaseItem/NewBaseItem";
+import { ItemList } from "components/itemList/ItemList";
 
 const BaseItems = () => {
 
@@ -44,7 +46,9 @@ const BaseItems = () => {
 
 return (
     <>
+        <AddBaseItem create={createBaseItems} />
         <Filter onFilter={changeFilter} initValue={filters}/>
+        <ItemList actual={actualBaseItems} onDelete={handleDelete}/>
     </>
 );
 };
