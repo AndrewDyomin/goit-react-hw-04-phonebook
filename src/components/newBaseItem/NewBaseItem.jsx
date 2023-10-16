@@ -2,7 +2,7 @@ import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
 
 export const AddBaseItem = ({ create }) => {
-    const [fields, setFields] = useState(['name', 'price'])
+    const [fields, setFields] = useState(['name', 'price', 'units'])
 
    const handleSubmit = evt => {
         evt.preventDefault();
