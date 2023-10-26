@@ -1,7 +1,5 @@
 import { lazy } from "react";
 import { GlobalStyle } from '../global-style';
-// import { nanoid } from 'nanoid';
-// import { useEffect, useState } from 'react';
 import { SharedLayout } from "./sharedLayout/SharedLayout";
 import { Routes, Route, Navigate } from "react-router-dom";
 

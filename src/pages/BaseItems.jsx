@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { nanoid } from 'nanoid';
 import { Filter } from '../components/filter/Filter';
 import { AddBaseItem } from "components/newBaseItem/NewBaseItem";
-import { ItemList } from "components/itemList/ItemList";
+import { ItemList } from "components/baseItemList/ItemList";
 
 const BaseItems = () => {
 
@@ -30,6 +30,7 @@ const BaseItems = () => {
             alert(`${values.name} is already in base items list`);
           } else {
             values.id = nanoid();
+            delete values.initialFields;
             setBaseItems(prevState => [...prevState, values]);
           };  
       };
