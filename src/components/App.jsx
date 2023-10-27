@@ -1,57 +1,63 @@
 import { lazy } from "react";
 import { GlobalStyle } from '../global-style';
-import { SharedLayout } from "./sharedLayout/SharedLayout";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Component } from "react";
+import { AddContact } from './newContact/NewContact';
+import { Filter } from './filter/Filter';
+import { ContactList } from './contactList/ContactList';
+import { nanoid } from 'nanoid';
 
-const Home = lazy(() => import("pages/Home"));
-const BaseItems = lazy(() => import("pages/BaseItems"));
-const CustomItems = lazy(() => import("pages/CustomItems"));
+export class App extends Component {
+  state = {
+    contacts: [
+      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+    ],
+    filter: '',
+  }
 
-export const App = () => {
-const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem("contacts");
-    if (savedContacts !== null) {
-      const parsedContacts = JSON.parse(savedContacts);
-      return(parsedContacts);
-    };
-});
-const [filter, setFilter] = useState('');
-
-useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-}, [contacts])
-
-const createContact = (values) => {
-  const targetContact = contacts
-    .map((cont) => cont.name.toLowerCase())
-    .includes(values.name.toLowerCase());
+createContact = values => {
+    const targetContact = this.state.contacts
+      .map((cont) => cont.name.toLowerCase())
+      .includes(values.name.toLowerCase());
 
     if (targetContact) {
       alert(`${values.name} is already in contacts`);
     } else {
       values.id = nanoid();
-      setContacts(prevState => [...prevState, values]);
-    };  
+      this.setState(prevState => {
+        return {
+          contacts: [...prevState.contacts, values],
+        };
+      });
+  };
 };
 
-const changeFilter = searchValue => {
-  setFilter(searchValue.target.value);
+changeFilter = searchValue => {
+  this.setState({filter: `${searchValue.target.value}`});
 }
 
-const handleDelete = (contactId) => {
-  setContacts(prevState => prevState.filter(contact => contact.id !== contactId));
+handleDelete = contactId => {
+  this.setState(prevState => {
+    return {
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    };
+  });
 };
 
-const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
-
-  return (
+  render() {
+    const { contacts, filter } = this.state;
+    const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+    return (
     <>
       <GlobalStyle />
-      <AddContact create={createContact} />
+      <AddContact create={this.createContact} />
       <div>
-        <Filter onFilter={changeFilter} initValue={filter}/>
-        <ContactList actual={actualContacts} onDelete={handleDelete}/>
+        <Filter onFilter={this.changeFilter} initValue={this.state.filter}/>
+        <ContactList actual={actualContacts} onDelete={this.handleDelete}/>
       </div>
     </>
-  );
+    );
+  };
 };
