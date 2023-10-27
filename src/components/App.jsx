@@ -5,22 +5,26 @@ import { AddContact } from './newContact/NewContact';
 import { Filter } from './filter/Filter';
 import { ContactList } from './contactList/ContactList';
 import { nanoid } from 'nanoid';
+import { useEffect, useState } from 'react';
 
-export class App extends Component {
-  state = {
-    contacts: [
-      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-    ],
-    filter: '',
-  }
+export const App = () => {
+const [contacts, setContacts] = useState(() => {
+    const savedContacts = localStorage.getItem("contacts");
+    if (savedContacts !== null) {
+      const parsedContacts = JSON.parse(savedContacts);
+      return(parsedContacts);
+    };
+});
+const [filter, setFilter] = useState('');
 
-createContact = values => {
-    const targetContact = this.state.contacts
-      .map((cont) => cont.name.toLowerCase())
-      .includes(values.name.toLowerCase());
+useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+}, [contacts])
+
+const createContact = (values) => {
+  const targetContact = contacts
+    .map((cont) => cont.name.toLowerCase())
+    .includes(values.name.toLowerCase());
 
     if (targetContact) {
       alert(`${values.name} is already in contacts`);
@@ -46,18 +50,16 @@ handleDelete = contactId => {
   });
 };
 
-  render() {
-    const { contacts, filter } = this.state;
-    const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
-    return (
+const actualContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+
+  return (
     <>
       <GlobalStyle />
       <AddContact create={this.createContact} />
       <div>
-        <Filter onFilter={this.changeFilter} initValue={this.state.filter}/>
-        <ContactList actual={actualContacts} onDelete={this.handleDelete}/>
+        <Filter onFilter={changeFilter} initValue={filter}/>
+        <ContactList actual={actualContacts} onDelete={handleDelete}/>
       </div>
     </>
-    );
-  };
+  );
 };
