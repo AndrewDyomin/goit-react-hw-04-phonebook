@@ -4,7 +4,7 @@ export const Filter = ({ onFilter, initValue }) => {
     return (
         <Container>
             <FilterItem>
-                <h2>Primitive items</h2>
+                <h2>Contacts</h2>
             </FilterItem>
             <FilterItem>
                 <label htmlFor="filter">Filter</label>

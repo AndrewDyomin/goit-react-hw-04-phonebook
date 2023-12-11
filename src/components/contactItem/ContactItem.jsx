@@ -1,6 +1,6 @@
-import { ContactCard, DelBtn } from "./baseItem.styled";
+import { ContactCard, DelBtn } from "./ContactItem.styled";
 
-export const BaseItem = ({ item, onDelete }) => {
+export const ContactItem = ({ item, onDelete }) => {
     return (
         <ContactCard>
             <p>{item.name}: {item.number}</p>
